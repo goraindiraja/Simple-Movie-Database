@@ -1,0 +1,22 @@
+[
+    {
+        "name": "G",
+        "description": "Suitable for All Ages"
+    },
+    {
+        "name": "PG",
+        "description": "Children - Parental Guidance Needed "
+    },
+    {
+        "name": "PG-13",
+        "description": "For Teens 13 Years or Older "
+    },
+    {
+        "name": "R",
+        "description": "17+ Recommended (May Contain Violence, Nudity, and Profanity)"
+    },
+    {
+        "name": "NC-17",
+        "description": "Clearly Adult (May Contain Extreme Sexual Content / Nudity)"
+    }
+]

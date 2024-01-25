@@ -1,0 +1,68 @@
+[
+    {
+        "id": 1,
+        "title": "Avatar",
+        "director": "James Cameron",
+        "releasedYear": 2009,
+        "duration": 162,
+        "genre": "Action, Adventure, Fantasy",
+        "votes": 0,
+        "trailerURL" : "https://youtu.be/5PSNL1qE6VY",
+        "imageURL" : "https://i.ebayimg.com/images/g/CwEAAOSwv4xf5cdv/s-l1600.jpg",
+        "synopsis" : "On the lush alien world of Pandora live the Na'vi, beings who appear primitive but are highly evolved. Because the planet's environment is poisonous, human/Na'vi hybrids, called Avatars, must link to human minds to allow for free movement on Pandora. Jake Sully (Sam Worthington), a paralyzed former Marine, becomes mobile again through one such Avatar and falls in love with a Na'vi woman (Zoe Saldana). As a bond with her grows, he is drawn into a battle for the survival of her world.",
+        "RatingId" : 3
+    },
+    {
+        "id": 2,
+        "title": "The Wolf of Wall Street",
+        "director": "Martin Scorsese",
+        "releasedYear": 2013,
+        "duration": 180,
+        "genre": "Biography, Comedy, Crime",
+        "votes": 0,
+        "trailerURL" : "https://youtu.be/iszwuX1AK6A",
+        "imageURL" : "https://myhotposters.com/cdn/shop/products/mHP0138_1024x1024.jpeg?v=1571444282",
+        "synopsis" : "In 1987, Jordan Belfort (Leonardo DiCaprio) takes an entry-level job at a Wall Street brokerage firm. By the early 1990s, while still in his 20s, Belfort founds his own firm, Stratton Oakmont. Together with his trusted lieutenant (Jonah Hill) and a merry band of brokers, Belfort makes a huge fortune by defrauding wealthy investors out of millions. However, while Belfort and his cronies partake in a hedonistic brew of sex, drugs and thrills, the SEC and the FBI close in on his empire of excess.",
+        "RatingId" : 4
+    },
+    {
+        "id": 3,
+        "title": "The Guardian of Galaxy",
+        "director": "James Gunn",
+        "releasedYear": 2013,
+        "duration": 120,
+        "genre": "Action, Adventure, Comedy",
+        "votes": 0,
+        "trailerURL" : "https://youtu.be/d96cjJhvlMA",
+        "imageURL" : "https://myhotposters.com/cdn/shop/products/HP3083_d127ad88-298d-4498-8828-0c636f9b2fae_1024x1024.jpg?v=1571445097",
+        "synopsis" : "Brash space adventurer Peter Quill (Chris Pratt) finds himself the quarry of relentless bounty hunters after he steals an orb coveted by Ronan, a powerful villain. To evade Ronan, Quill is forced into an uneasy truce with four disparate misfits: gun-toting Rocket Raccoon, treelike-humanoid Groot, enigmatic Gamora, and vengeance-driven Drax the Destroyer. But when he discovers the orb's true power and the cosmic threat it poses, Quill must rally his ragtag group to save the universe.",
+        "RatingId" : 2
+    },
+    {
+        "id": 4,
+        "title": "Parasite",
+        "director": "Boong Joon Ho",
+        "releasedYear": 2019,
+        "duration": 132,
+        "genre": "Comedy, Drama, Thriller",
+        "votes": 0,
+        "trailerURL" : "https://youtu.be/5xH0HfJHsaY",
+        "imageURL" : "https://image.tmdb.org/t/p/original/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+        "synopsis" : "The struggling Kim family sees an opportunity when the son starts working for the wealthy Park family. Soon, all of them find a way to work within the same household and start living a parasitic life.",
+        "RatingId" : 4
+    },
+    {
+        "id": 5,
+        "title": "Finding Nemo",
+        "director": "Albert Brooks",
+        "releasedYear": 2003,
+        "duration": 100,
+        "genre": "Adventure, Comedy",
+        "votes": 0,
+        "trailerURL" : "https://youtu.be/9oQ628Seb9w",
+        "imageURL" : "https://image.tmdb.org/t/p/original/eHuGQ10FUzK1mdOY69wF5pGgEf5.jpg",
+        "synopsis" : "Marlin (Albert Brooks), a clown fish, is overly cautious with his son, Nemo (Alexander Gould), who has a foreshortened fin. When Nemo swims too close to the surface to prove himself, he is caught by a diver, and horrified Marlin must set out to find him. A blue reef fish named Dory (Ellen DeGeneres) -- who has a really short memory -- joins Marlin and complicates the encounters with sharks, jellyfish, and a host of ocean dangers. Meanwhile, Nemo plots his escape from a dentist's fish tank.",
+        "RatingId" : 1
+    }
+
+]

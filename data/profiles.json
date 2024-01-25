@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "firstName": "Pain",
+        "lastName" : "Akatsuki",
+        "email": "admin@admin.com",
+        "dateOfBirth" : "01/01/1980",
+        "UserId": 1
+    },
+    {
+        "id": 2,
+        "firstName": "Titi",
+        "lastName" : "Toto",
+        "email": "titi@gmail.com",
+        "dateOfBirth" : "09/09/1999",
+        "UserId": 2
+    }
+]
