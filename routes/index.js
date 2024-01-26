@@ -2,6 +2,7 @@ const express = require("express");
 const routes = express.Router();
 
 const movies = require('./movies');
+const moviesAdmin = require('./movies-admin');
 const users = require('./users');
 const Controller = require("../controllers/controller");
 
@@ -30,8 +31,11 @@ routes.use((req, res, next) => {
 routes.get("/", Controller.showAllMovies);
 
 routes.use("/movies", movies)
+routes.use("/movies-admin", moviesAdmin)
 routes.use("/users", users)
 routes.get("/wishlist", Controller.showWishlist)
+routes.get("/wishlist-admin", Controller.showWishlistAdmin)
+routes.get("/wishlist/:id", Controller.changeStatus)
 routes.get("/logout", Controller.logout)
 
 module.exports = routes

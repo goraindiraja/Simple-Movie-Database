@@ -41,7 +41,7 @@
                             <a class="nav-link" href="/logout">Logout</a>
                         </li>
                     </ul>
-                    <form class="d-flex" role="search" action="/movies-admin" method="get">
+                    <form class="d-flex" role="search" action="/movies" method="get">
                         <input class="form-control me-2" type="text" name="search" placeholder="Search"
                             aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
@@ -51,43 +51,39 @@
         </nav>
     </header>
 
-
     <main>
-        <h1>Users List</h1>
+        <h1>Movie List</h1>
+
+        <% if(deleted){ %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong><%= deleted %> Has Been Deleted </strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
 
         <section>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Age</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% data.forEach((item, index) => { %>
-                        <tr>
-                            <th scope="row"><%= index+1 %></th>
-                            <td><%= item.firstName %></td>
-                            <td><%= item.lastName %></td>
-                            <td><%= item.age %></td>
-                            <td><%= item.User.username %></td>
-                            <td><%= item.email %></td>
-                            <td><%= item.User.role %></td>
-                            <td>
-                                <a href="/users/<%= item.User.id %>/delete" class="btn btn-danger">Delete</a>
-                            </td>
-    
-                        </tr>
-    
-                        <% }) %>
-                </tbody>
-            </table>
+            <% data.forEach(item => { %>
+            <div class="card mb-3" style="max-width: 50%;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="<%= item.imageURL %>" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= item.title %></h5>
+                            <div class="d-flex gap-3">
+                                <p class="card-text"><%= item.releasedYear %></p>
+                                <p class="card-text"><%= convertDuration(+item.duration) %></p>
+                                <p class="card-text"><%= item.Rating.name %></p>
+                            </div>
+                            <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                            <a href="/movies-admin/<%= item.id %>" class="btn btn-outline-primary">View Details</a>
+                            <a href="/movies-admin/<%= item.id %>/delete" class="btn btn-outline-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }) %>
         </section>
     </main>
 

@@ -15,6 +15,15 @@
     </header>
 
     <main>
+
+        <% errorMessage.forEach(error => { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong><%= error %></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% }) %>
+
+
         <section>
             <div class="container mt-5">
                 <div class="row justify-content-center">
@@ -83,6 +92,8 @@
 
                                     <button type="submit" class="btn btn-primary w-100">Register</button>
                                 </form>
+
+                                <p class="mt-2 text-center">Already Have an Account ? Log In <a href="/login">Here</a></p>
                             </div>
                         </div>
                     </div>

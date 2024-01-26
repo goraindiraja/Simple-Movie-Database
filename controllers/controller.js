@@ -2,16 +2,25 @@ const {User, Profile, Rating, Movie, Wishlist} = require('../models');
 const { Op } = require("sequelize");
 const convertDuration = require('../helper/convertDuration');
 const bcryptjs = require('bcryptjs');
+const { error } = require('console');
 
 class Controller{
     //----- Login Form -----//
     static async loginForm(req, res){
         try {
-            res.render('login')
+
+            let error = req.query.error
+            
+            let errorMessage = []
+            if(error){
+                errorMessage = error.split(",")
+            }
+            
+            res.render('login', {errorMessage})
 
         } catch (error) {
             console.log(error);
-            res.send(error)
+            res.send(error.message)
         }
     }
 
@@ -19,6 +28,7 @@ class Controller{
         try {
             console.log(req.body);
             let {username, password} = req.body
+            console.log(username, password);
 
             let user = await User.findOne({
                 where: {
@@ -26,35 +36,68 @@ class Controller{
                 }
             })
 
+            if(!user){
+                throw Error("User Not Found")
+            }
+
+            if(!username || !password){
+                // let errors = 'Username or Password Cannot be Empty'
+                throw Error('Username or Password Cannot be Empty')
+            }
             
             let isFound = bcryptjs.compareSync(password, user.password)
 
-            console.log(user.id);
             if(isFound){
-                console.log(user);
-                req.session.user = {
-                    id: user.id,
-                    username: user.username,
-                    role: user.role
+                if(user.role === "Admin"){
+                    req.session.user = {
+                        id: user.id,
+                        username: user.username,
+                        role: user.role
+                    }
+                    res.redirect("/movies-admin")
+
+                } else{
+                    // res.send("Member")
+                    req.session.user = {
+                        id: user.id,
+                        username: user.username,
+                        role: user.role
+                    }
+                    res.redirect("/movies")
                 }
-                res.redirect("/movies")
 
             } else{
-                res.send('else')
-
+                throw Error("Password Wrong")
             }
 
             
         } catch (error) {
-            console.log(error);
-            res.send(error)
+            if(error.name === 'SequelizeValidationError'){
+                let errors = error.errors.map(error => {
+                    return error.message
+                })
+
+                res.redirect(`/login?error=${errors}`)
+            } else{
+                console.log(error);
+                res.redirect(`/login?error=${error.message}`)
+            }
         }
     }
 
     //----- Register Form -----//
     static async registerForm(req, res){
         try {
-            res.render('register')
+
+            let error = req.query.error
+            
+            let errorMessage = []
+            if(error){
+                errorMessage = error.split(",")
+            }
+
+            console.log(errorMessage);
+            res.render('register', {errorMessage})
 
         } catch (error) {
             console.log(error);
@@ -67,10 +110,6 @@ class Controller{
             console.log(req.body);
             let {firstName, lastName, username, password, email, dateOfBirth, role} = req.body
             
-            // let salt = bcryptjs.genSaltSync(10)
-            // let encryptPassword = bcryptjs.hashSync(password, salt)
-            // : encryptPassword
-
             let data = await User.create({
                 username,
                 password,
@@ -88,8 +127,16 @@ class Controller{
             res.redirect('/login')
 
         } catch (error) {
-            console.log(error);
-            res.send(error)
+            if(error.name === 'SequelizeValidationError'){
+                let errors = error.errors.map(error => {
+                    return error.message
+                })
+
+                res.redirect(`/register?error=${errors}`)
+            } else{
+                console.log(error);
+                res.redirect(`/register?error=${error.message}`)
+            }
         }
     }
 
@@ -123,12 +170,54 @@ class Controller{
             }
 
             let data = await Movie.findAll(opt);
-
-            res.render('movies', {data, deleted, convertDuration})
+            res.render('movies', {data, convertDuration})
             
         } catch (error) {
             console.log(error);
             res.send(error)
+        }
+    }
+    
+    static async showAllMoviesAdmin(req, res){
+        try {
+
+            if(req.session.user.role !== "Admin"){
+                throw Error("Access Denied")
+            }
+
+            let {deleted} = req.query
+            let {search} = req.query
+
+            let opt = {
+                attributes: ['id', 'title', 'duration', 'genre', 'imageURL', 'votes', 'releasedYear'],
+                include:{
+                    model: Rating,
+                    attributes: ['name']
+                }
+            }
+
+            if(search){
+                opt = {
+                    attributes: ['id', 'title', 'duration', 'genre', 'imageURL', 'votes', 'releasedYear'],
+                    include:{
+                        model: Rating,
+                        attributes: ['name']
+                    },
+                    where:{
+                        title: {
+                            [Op.iLike]: `%${search}%`
+                        }
+                    }
+                }
+            }
+
+            let data = await Movie.findAll(opt);
+
+            res.render('movies-admin', {data, deleted, convertDuration})
+
+        } catch (error) {
+            console.log(error);
+            res.send(error.message)
         }
     }
 
@@ -151,8 +240,37 @@ class Controller{
         }
     }
 
+    static async movieDetailsAdmin(req, res){
+        try {
+
+            if(req.session.user.role !== "Admin"){
+                throw Error("Access Denied")
+            }
+
+            let data = await Movie.findOne({
+                include: {
+                    model: Rating,
+                },
+                where: {
+                    id: req.params.id
+                }
+            })
+
+            res.render('movies-detail-admin', {data, convertDuration})
+
+        } catch (error) {
+            console.log(error);
+            res.send(error.message)
+        }
+    }
+
     static async addMovieForm(req,res){
         try {
+
+            if(req.session.user.role !== "Admin"){
+                throw Error("Access Denied")
+            }
+
             let error = req.query.error
             
             let errorMessage = []
@@ -160,15 +278,13 @@ class Controller{
                 errorMessage = error.split(",")
             }
             
-            // console.log(errorMessage);
-
             let data = await Rating.findAll();
 
             res.render('movies-add', {data, errorMessage})
 
         } catch (error) {
             console.log(error);
-            res.send(error)
+            res.send(error.message)
         }
     }
 
@@ -199,7 +315,7 @@ class Controller{
                 imageURL: changeImg
             })
 
-            res.redirect('/movies')
+            res.redirect('/movies-admin')
 
         } catch (error) {
             if(error.name === 'SequelizeValidationError'){
@@ -207,7 +323,7 @@ class Controller{
                     return error.message
                 })
 
-                res.redirect(`/movies/add?error=${errors}`)
+                res.redirect(`/movies-admin/add?error=${errors}`)
             } else{
                 console.log(error);
                 res.send(error)
@@ -217,6 +333,10 @@ class Controller{
 
     static async editMovieForm(req,res){
         try {
+
+            if(req.session.user.role !== "Admin"){
+                throw Error("Access Denied")
+            }
 
             let error = req.query.error
             
@@ -238,7 +358,7 @@ class Controller{
             res.render('movies-edit', {data, rating, errorMessage})
         } catch (error) {
             console.log(error);
-            res.send(error)
+            res.send(error.message)
         }
     }
 
@@ -262,7 +382,7 @@ class Controller{
                     return error.message
                 })
 
-                res.redirect(`/movies/${id}/edit?error=${errors}`)
+                res.redirect(`/movies-admin/${id}/edit?error=${errors}`)
             } else{
                 console.log(error);
                 res.send(error)
@@ -272,6 +392,11 @@ class Controller{
 
     static async deleteMovies(req, res){
         try {
+
+            if(req.session.user.role !== "Admin"){
+                throw Error("Access Denied")
+            }
+
             let {id} = req.params
             
             let deleted = await Movie.findOne({
@@ -287,17 +412,17 @@ class Controller{
                 }
             })
 
-            res.redirect(`/movies?deleted=${deleted.title}`)
+            res.redirect(`/movies-admin?deleted=${deleted.title}`)
             
         } catch (error) {
             console.log(error);
-            res.send(error)
+            res.send(error.message)
         }
     }
 
     static async addWatchlist(req, res){
         try {
-            console.log(req.session.user.id, "<<<<<");
+            // console.log(req.session.user.id, "<<<<<");
             await Wishlist.create({
                 UserId: req.session.user.id,
                 MovieId: req.params.id,
@@ -308,6 +433,26 @@ class Controller{
         } catch (error) {
             console.log(error);
             res.send(error)
+        }
+    }
+
+    static async addWatchlistAdmin(req, res){
+        try {
+
+            if(req.session.user.role !== "Admin"){
+                throw Error("Access Denied")
+            }
+            // console.log(req.session.user.id, "<<<<<");
+            await Wishlist.create({
+                UserId: req.session.user.id,
+                MovieId: req.params.id,
+            })
+            
+            res.redirect(`/movies-admin/${req.params.id}`)
+
+        } catch (error) {
+            console.log(error);
+            res.send(error.message)
         }
     }
 
@@ -333,15 +478,43 @@ class Controller{
         }
     }
 
-    //----- Users Page -----//
-    static async showAllUsers(req, res){
+    static async showWishlistAdmin(req, res){
         try {
-            let data = await User.findAll({
-                include: {
-                    model: Profile
+
+            if(req.session.user.role !== "Admin"){
+                throw Error("Access Denied")
+            }
+
+            let data = await User.findOne({
+                include: Movie,
+                through: {Wishlist},
+                where: {
+                    id: req.session.user.id
                 }
             })
 
+            // res.send(data)
+            // console.log(data.Movies.Wishlist);
+            res.render("wishlist-admin", {data, convertDuration})
+
+
+        } catch (error) {
+            console.log(error);
+            res.send(error.message)
+        }
+    }
+
+    //----- Users Page -----//
+    static async showAllUsers(req, res){
+        try {
+            let data = await Profile.findAll({
+                include: {
+                    model: User
+                }
+            })
+
+            console.log(data);
+            // console.log(data[0].Profiles[0].firstName);
             // res.send(data)
             res.render('users', {data})
 
@@ -374,6 +547,23 @@ class Controller{
         }
     }
 
+    static async changeStatus(req, res){
+        try {
+            await Wishlist.update({
+                status: "Finished"
+            },{ where: {
+                MovieId: req.params.id
+            }})
+
+
+            // console.log(data);
+            res.redirect("/wishlist")
+
+        } catch (error) {
+            console.log(error);
+            res.send(error.message)
+        }
+    }
     static logout(req, res) {
         req.session.destroy((err) => {
             if (!err) {

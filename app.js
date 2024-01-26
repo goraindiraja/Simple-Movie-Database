@@ -14,7 +14,7 @@ app.use(session({
     secret: 'seckret-key',
     resave: false,
     saveUninitialized: false,
-  }))
+}))
 
 app.use("/", routes);
 

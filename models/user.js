@@ -14,13 +14,46 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.belongsToMany(models.Movie, { through: 'Wishlist', foreignKey:"UserId" });
-      User.hasMany(models.Profile, {foreignKey: "id"})
+      User.hasOne(models.Profile, {foreignKey: "id"})
     }
   }
   User.init({
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
-    role: DataTypes.STRING
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty:{
+          msg: "Username Cannot be Empty"
+        },
+        notNull:{
+          msg: "Username Cannot be Empty"
+        }
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty:{
+          msg: "Password Cannot be Empty"
+        },
+        notNull:{
+          msg: "Password Cannot be Empty"
+        }
+      }
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty:{
+          msg: "Role Must Be Selected"
+        },
+        notNull:{
+          msg: "Role Must Be Selected"
+        }
+      }
+    }
   }, {
     hooks:{
       beforeCreate(instances, options){

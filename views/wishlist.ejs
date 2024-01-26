@@ -30,14 +30,6 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/movies/add">Add New Movies</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/users">View Users Data</a>
-                        </li>
-
-                        <li class="nav-item">
                             <a class="nav-link" href="/logout">Logout</a>
                         </li>
                     </ul>
@@ -63,7 +55,7 @@
                         <th scope="col">Genre</th>
                         <th scope="col">Duration</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -75,9 +67,7 @@
                         <td><%= convertDuration(item.duration) %></td>
                         <td><a href="/wishlist/<%= item.id %>" class="btn btn-warning"><%= item.Wishlist.status %></a>
                         </td>
-                        <td>
-                            <a href="" class="btn btn-danger">Delete</a>
-                        </td>
+
                     </tr>
                     <% }) %>
                 </tbody>
